@@ -4,7 +4,7 @@ const Loader = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
       <img
-        src="https://cdn.pixabay.com/photo/2021/05/24/07/24/bitcoin-6270061_960_720.png"
+        src="https://images.vexels.com/content/259745/preview/single-bitcoin-coin-286253.png"
         alt="Carregando..."
         style={{ width: "100px", animation: "spin 2s linear infinite" }}
       />

@@ -11,11 +11,37 @@ const CryptoNews = () => {
     const fetchNews = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:5000/api/news");
-        const filteredNews = response.data.filter(article => 
-          (article.title && article.title.toLowerCase().includes(symbol.toLowerCase())) ||
-          (article.description && article.description.toLowerCase().includes(symbol.toLowerCase())) ||
-          (article.content && article.content.toLowerCase().includes(symbol.toLowerCase()))
+        
+        // Lista de sinônimos para as 15 moedas
+        const synonyms = {
+          BTCUSDT: ["BTC", "Bitcoin"],
+          ETHUSDT: ["ETH", "Ethereum"],
+          BNBUSDT: ["BNB", "Binance Coin"],
+          XRPUSDT: ["XRP", "Ripple"],
+          ADAUSDT: ["ADA", "Cardano"],
+          SOLUSDT: ["SOL", "Solana"],
+          DOTUSDT: ["DOT", "Polkadot"],
+          LINKUSDT: ["LINK", "Chainlink"],
+          MATICUSDT: ["MATIC", "Polygon"],
+          AVAXUSDT: ["AVAX", "Avalanche"],
+          SHIBUSDT: ["SHIB", "Shiba Inu"],
+          DOGEUSDT: ["DOGE", "Dogecoin"],
+          APEUSDT: ["APE", "ApeCoin"],
+          SANDUSDT: ["SAND", "The Sandbox"],
+          GALAUSDT: ["GALA", "Gala"]
+        };
+
+        const terms = synonyms[symbol] || [symbol]; // Use os sinônimos da moeda
+
+        // Filtrar notícias relevantes
+        const filteredNews = response.data.filter(article =>
+          terms.some(term =>
+            (article.title && article.title.toLowerCase().includes(term.toLowerCase())) ||
+            (article.description && article.description.toLowerCase().includes(term.toLowerCase())) ||
+            (article.content && article.content.toLowerCase().includes(term.toLowerCase()))
+          )
         );
+
         setNews(filteredNews);
         setLoading(false);
       } catch (error) {
