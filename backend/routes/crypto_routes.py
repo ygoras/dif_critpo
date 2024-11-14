@@ -29,6 +29,7 @@ def calculate_macd(prices, short_period=12, long_period=26, signal_period=9):
     signal_line = sum([macd_line] * signal_period) / signal_period  # Placeholder
     return macd_line - signal_line
 
+
 @crypto_routes.route('/api/crypto', methods=['GET'])
 def get_crypto_data():
     try:
