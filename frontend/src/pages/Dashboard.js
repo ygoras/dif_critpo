@@ -1,7 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CryptoGroup from "../components/CryptoGroup";
+import Loader from "../components/Loader";
 
 const Dashboard = () => {
   const [group1, setGroup1] = useState([]);
@@ -29,7 +29,7 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <Loader />;
 
   return (
     <div>
