@@ -10,16 +10,19 @@ const CryptoCard = ({ crypto }) => {
     marketCap,
     macd,
     priceChange24h,
-    historicalData,
+    historicalData = [], // Garantir que seja pelo menos um array vazio
   } = crypto;
+
+  // Verificar se há dados históricos para o gráfico
+  const hasHistoricalData = historicalData.length > 0;
 
   // Preparar dados para o gráfico
   const chartData = {
-    labels: historicalData.map((data) => data.date),
+    labels: hasHistoricalData ? historicalData.map((data) => data.date) : [],
     datasets: [
       {
         label: 'Preço',
-        data: historicalData.map((data) => data.price),
+        data: hasHistoricalData ? historicalData.map((data) => data.price) : [],
         borderColor: 'rgba(75,192,192,1)',
         fill: false,
       },
@@ -31,9 +34,15 @@ const CryptoCard = ({ crypto }) => {
 
   return (
     <div className="crypto-card">
-      <h2>{name} ({symbol})</h2>
+      <h2>
+        {name} ({symbol})
+      </h2>
       <div className="chart-container">
-        <Line data={chartData} />
+        {hasHistoricalData ? (
+          <Line data={chartData} />
+        ) : (
+          <p style={{ textAlign: 'center', color: 'gray' }}>Dados históricos indisponíveis</p>
+        )}
       </div>
       <p>Capitalização de Mercado: {marketCap ? `$${marketCap.toLocaleString()}` : 'N/A'}</p>
       <p>MACD: {macd !== undefined ? macd : 'N/A'}</p>
