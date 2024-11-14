@@ -1,54 +1,40 @@
-import React from 'react';
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Line } from 'react-chartjs-2';
-import 'chart.js/auto';
-import './CryptoCard.css';
+
 
 const CryptoCard = ({ crypto }) => {
-  const {
-    name,
-    symbol,
-    marketCap,
-    macd,
-    priceChange24h,
-    historicalData = [], // Garantir que seja pelo menos um array vazio
-  } = crypto;
+  const navigate = useNavigate();
 
-  // Verificar se há dados históricos para o gráfico
-  const hasHistoricalData = historicalData.length > 0;
-
-  // Preparar dados para o gráfico
-  const chartData = {
-    labels: hasHistoricalData ? historicalData.map((data) => data.date) : [],
-    datasets: [
-      {
-        label: 'Preço',
-        data: hasHistoricalData ? historicalData.map((data) => data.price) : [],
-        borderColor: 'rgba(75,192,192,1)',
-        fill: false,
-      },
-    ],
-  };
-
-  // Definir classe para variação de preço
-  const priceChangeClass = priceChange24h >= 0 ? 'positive-change' : 'negative-change';
+  if (!crypto) return null;
 
   return (
-    <div className="crypto-card">
-      <h2>
-        {name} ({symbol})
-      </h2>
-      <div className="chart-container">
-        {hasHistoricalData ? (
-          <Line data={chartData} />
-        ) : (
-          <p style={{ textAlign: 'center', color: 'gray' }}>Dados históricos indisponíveis</p>
-        )}
+    <div style={{ border: "1px solid #ccc", padding: "1rem", width: "300px" }}>
+      <h3>{crypto.symbol}</h3>
+      <p>Preço: ${crypto.price || "N/A"}</p>
+      <p>Variação (24h): {crypto.price_change_24h || "N/A"}%</p>
+      <p>Capitalização: ${crypto.market_cap || "N/A"}</p>
+      <p>Volume: ${crypto.volume || "N/A"}</p>
+      <p>RSI: {crypto.rsi || "N/A"}</p>
+      <p>MACD: {crypto.macd || "N/A"}</p>
+      <div
+        style={{
+          padding: "0.5rem",
+          backgroundColor: crypto.buy_signal ? "green" : crypto.sell_signal ? "red" : "gray",
+          color: "white",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        {crypto.buy_signal ? "Comprar" : crypto.sell_signal ? "Vender" : "Neutro"}
       </div>
-      <p>Capitalização de Mercado: {marketCap ? `$${marketCap.toLocaleString()}` : 'N/A'}</p>
-      <p>MACD: {macd !== undefined ? macd : 'N/A'}</p>
-      <p className={priceChangeClass}>
-        Variação 24h: {priceChange24h !== undefined ? `${priceChange24h}%` : 'N/A'}
-      </p>
+      <button
+        style={{ marginTop: "1rem", padding: "0.5rem", backgroundColor: "#007BFF", color: "white", border: "none", cursor: "pointer" }}
+        onClick={() => navigate(`/news/${crypto.symbol}`)}
+      >
+        Notícias sobre
+      </button>
     </div>
   );
 };
